@@ -59,10 +59,12 @@ body{
 
 /* Card styling */
 
-.card{
+.listing-card{
     margin-bottom: 2rem;
     border: none !important;
 }
+
+
 
 .card-img-top{
     width: 100% !important;
@@ -70,9 +72,10 @@ body{
     border-radius: 1rem !important;
 }
 
-.card-body{
+.listing-body{
     padding: 0 !important;
 }
+
 
 .listing-link{
     text-decoration: none;
