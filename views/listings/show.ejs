@@ -7,15 +7,18 @@
          <img src="<%= listing.image.url %>" class="card-img-top  show-img" alt="listing_image" />
          <div class="listing-body">
              <p class="card-text"> 
-             <b><%= listing.title %> </p></b> 
-             <%= listing.description %> <br>
-             &#8377; <%= listing.price %> <br>
-             <%= listing.location %> <br>
-             <%= listing.country %>
+            <p>  Owned By<i> <%= listing.owner ? listing.owner.username : "Unknown User" %></i></p>   
+               </p>
+                 <p class="card-text"><%= listing.title %></p> 
+             <p class="card-text"><%= listing.description %> </p>
+             <p class="card-text"> &#8377; <%= listing.price %> </p> 
+             <p class="card-text"><%= listing.location %> </p>
+             <p class="card-text"><%= listing.country %></p>
 
          </div>
     </div>
-
+   <% if (currUser && listing.owner && currUser._id.equals(listing.owner._id)) { %>
+     
     <div class="btns mb-5">
          <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark edit-btn  offset-2">Edit </a>
     
@@ -24,7 +27,8 @@
           </form>
      </div>
 
-      
+   <% } %>
+      <% if(currUser){  %>
      <div class="cols-8 offset-2 mb-3">
           <h4>Leave a Review </h4>
           <form action="/listings/<%= listing._id %>/reviews" method="post" novalidate class="needs-validation">
@@ -48,13 +52,14 @@
 
                <button class="btn btn-outline-dark">Submit</button>
           </form>
+      <% } %>
             <hr>
           <h4>All Reviews </h4>
           <ul>
            <% for(review of listing.reviews){ %>
                <div class="card col-5  row-1 mb-3" >
                     <div class="card-body  ">
-                         <h5 class="card-title">Abhay</h5>
+                         <h5 class="card-title"><%= review.author %></h5>
                          <p class="card-text"><%= review.comment %></p>
                          <p class="card-text"><%= review.rating %> stars</p>
 

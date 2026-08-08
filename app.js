@@ -9,6 +9,21 @@ const wrapAsync = require("./utils/wrapAsync.js");
 const {listingSchema,reviewSchema} = require("./Schema.js");
 const ExpressError = require("./utils/ExpressError.js");
 const Review = require("./models/review");
+const session = require("express-session");
+const flash = require("connect-flash");
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const User = require("./models/user");
+const userRouter = require("./routes/users.js");
+const {isLoggedIn,isOwner,isReviewAuthor} = require("./middleware.js");
+const listingController = require("./controllers/listing.js");
+const reviewController = require("./controllers/review.js");
+
+
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 const Mongo_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
@@ -29,10 +44,46 @@ app.use(methodOverRide("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname,"/public")));  //static file ko access karne ke liye public folder ka path joda
 
+const sessionOption = {
+    secret:"mysupersecretcode",
+    resave:false,
+    saveUninitialized: true,
+    cookie:{
+        expires:Date.now() + 7 * 24 * 60 * 60 * 1000,
+        maxAge:7 * 24 * 60 * 60 * 1000,
+        httpOnly:true
+    }
+};
+
+
 
 app.get("/", (req, res) => {      // basic API banana jo / route se through req le rha 
     res.send("I am root");
 })
+
+app.use(session(sessionOption));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+
+app.use((req,res,next) => {
+    res.locals.success = req.flash("success");  // agar req ke ander flash me koi bi msg aata to usse res ke local par store kar deghe...
+    res.locals.error = req.flash("error");
+    res.locals.currUser = req.user;
+    next();
+})
+
+// app.get("/demoUser", async (req,res) => {
+//     let fakeUser = new User ({
+//         email:"abc123@gmail.com",
+//         username:"abhay" 
+//     })
+//     const registeredUser = await User.register(fakeUser, "helloworld");
+//     res.send("registerUser");
+// });
+
+app.use("/", userRouter);
+    
 
 const validateListing = (req, res, next) => {
     let { error } = listingSchema.validate(req.body);
@@ -57,82 +108,43 @@ const validateReview = (req, res, next) => {
 };
 
 //*ye index route ka code
-app.get("/listings", wrapAsync(async (req,res) => {    // get request bheji /listings route par
-    const allListings =  await Listing.find({});    // Listing model se sari documents ko allListing variable ke ander dal diya..
-    res.render("listings/index.ejs", {allListings});       //index.js file ko run karaya and ussesare listing document bheja ..
-}))
+app.get("/listings", wrapAsync(listingController.index));
 
 //* new route 
-app.get("/listings/new",(req, res) => {   // so jaise hi is route par koi req aayi to new.ejs page render createHistogram..
-    res.render("listings/new.ejs");
-})
+app.get("/listings/new" , isLoggedIn , listingController.rendernewform);
 
 //* ye show route ka code
-app.get("/listings/:id",wrapAsync(async (req, res) => {
-    let {id} = req.params;
-    const listing =  await Listing.findById(id).populate("reviews");
-    res.render("listings/show.ejs", {listing});
-}))
+app.get("/listings/:id",wrapAsync(listingController.showListing));
 
 //* create route
-app.post("/listings", wrapAsync( async (req,res, next) =>{
-     const newListing = new Listing(req.body.listing);
-     await newListing.save();
-     res.redirect("/listings"); 
-    
-  
-}));
+app.post("/listings", wrapAsync(listingController.createListing));
 
 //*edit route ka code
-app.get("/listings/:id/edit", wrapAsync(async (req,res) => {  
-    let{id} = req.params;
-   const listing = await Listing.findById(id);
-   res.render("listings/edit.ejs", {listing});    
-
-}))
+app.get("/listings/:id/edit", isLoggedIn, wrapAsync(listingController.editListing));
 
 //*update route
-app.put("/listings/:id", wrapAsync(async (req,res) => {
-    let{id} = req.params;            // req me jo id aa rhi as parameter use access kar rahe
-     await Listing.findByIdAndUpdate(id,{...req.body.listing});   // us id se documentya listing ko access ka update kardege
-    res.redirect(`/listings/${id}`);
-}))
+app.put("/listings/:id",isLoggedIn,isOwner,validateListing, wrapAsync(listingController.updateListing));
 
 //*delete route
-app.delete("/listings/:id",wrapAsync(async (req,res) => {
-    let{id} = req.params; 
-     await Listing.findByIdAndDelete(id);
-     res.redirect("/listings");
-   
-})) 
+app.delete("/listings/:id",isLoggedIn,wrapAsync(listingController.destroyListing)) ;
 
-// Review
-app.post("/listings/:id/reviews", async (req,res) => {
-    let listing = await Listing.findById(req.params.id);
-    let newReview = new Review(req.body.review);
-    listing.reviews.push(newReview);
-    await newReview.save();
-    await listing.save();
-    res.redirect(`/listings/${listing._id}`);
-})
+//* Review
+app.post("/listings/:id/reviews",isLoggedIn,validateReview, wrapAsync(reviewController.createReview));
 
 //  Review delete route
-app.delete("/listings/:id/reviews/:reviewId", wrapAsync(async (req, res) => {
-    let { id, reviewId } = req.params;
+app.delete("/listings/:id/reviews/:reviewId",isLoggedIn,isReviewAuthor, wrapAsync(reviewController.destroyReview));
 
-    await Listing.findByIdAndUpdate(id, {
-        $pull: { reviews: reviewId }
-    });
-
-    await Review.findByIdAndDelete(reviewId);
-
-    res.redirect(`/listings/${id}`);
-}));
+// app.use((err, req, res, next) => {
+//     let{statuscode = 500,message = "something went wrong"} = err;
+//      res.status(statuscode).render("error.ejs", {message});
+// })
 
 app.use((err, req, res, next) => {
-    let{statuscode = 500,message = "something went wrong"} = err;
-     res.status(statuscode).render("error.ejs", {message});
-})
+    console.error(err);   // 👈 Add this line
+
+    let { statusCode = 500, message = "Something went wrong" } = err;
+    res.status(statusCode).render("error.ejs", { message });
+});
 
 app.listen(8080, () => {         // ek server chalu kiya port 8080 par 
     console.log("Server is running on port 8080");
