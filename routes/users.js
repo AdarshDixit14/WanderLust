@@ -8,25 +8,25 @@ const userController = require("../controllers/user")
 
 router.get("/signup", userController.renderSignupForm);
 
-router.post("/signup", wrapAsync(async (req, res) => {
+router.post("/signup", wrapAsync(async (req, res, next) => {
     try {
         const { username, email, password } = req.body;
 
         const newUser = new User({
             username,
-            email,
+            email
         });
 
         const registeredUser = await User.register(newUser, password);
-        console.log(registeredUser);
-        req.login("registeredUser", (err) => {
-            if(err){
+
+        req.login(registeredUser, (err) => {
+            if (err) {
                 return next(err);
             }
-             req.flash("success", "Welcome to WanderLust");
-             res.redirect("/listings");
 
-        })
+            req.flash("success", "Welcome to WanderLust");
+            res.redirect("/listings");
+        });
 
     } catch (e) {
         req.flash("error", e.message);

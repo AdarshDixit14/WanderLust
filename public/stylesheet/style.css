@@ -118,3 +118,53 @@ body{
     padding-left: 0;
     padding-right: 0;
 }
+
+.container {
+    max-width: 1000px;
+}
+
+.show-img {
+    height: 300px;
+    object-fit: cover;
+}
+
+.card {
+    border-radius: 10px;
+}
+
+.starability-slot {
+    margin: 0 auto;
+}
+
+.starability-result {
+    margin-top: 5px;
+}
+
+/* Listing buttons */
+.btns {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 17px;
+    margin-left: 15rem !important;
+}
+
+.btns .btn,
+.review-btn {
+    background-color: #ff385c;
+    border: 1px solid #ff385c;
+    color: white;
+}
+
+.btns .btn:hover,
+.review-btn:hover {
+    background-color: #e31c5f;
+    border-color: #e31c5f;
+    color: white;
+}
+
+.submit-btn{
+     background-color: #ff385c !important;
+    border: 1px solid #ff385c !important;
+    color: white !important;
+}

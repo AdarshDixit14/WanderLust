@@ -117,7 +117,12 @@ app.get("/listings/new" , isLoggedIn , listingController.rendernewform);
 app.get("/listings/:id",wrapAsync(listingController.showListing));
 
 //* create route
-app.post("/listings", wrapAsync(listingController.createListing));
+app.post(
+    "/listings",
+    isLoggedIn,
+    validateListing,
+    wrapAsync(listingController.createListing)
+);
 
 //*edit route ka code
 app.get("/listings/:id/edit", isLoggedIn, wrapAsync(listingController.editListing));
@@ -140,9 +145,13 @@ app.delete("/listings/:id/reviews/:reviewId",isLoggedIn,isReviewAuthor, wrapAsyn
 // })
 
 app.use((err, req, res, next) => {
-    console.error(err);   // 👈 Add this line
+    console.error(err);
 
-    let { statusCode = 500, message = "Something went wrong" } = err;
+    let {
+        statusCode = 500,
+        message = "Something went wrong"
+    } = err;
+
     res.status(statusCode).render("error.ejs", { message });
 });
 
