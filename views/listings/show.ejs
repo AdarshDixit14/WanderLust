@@ -25,16 +25,17 @@
                         <%= listing.description %>
                     </p>
 
-                    <p class="card-text">
-                        &#8377; <%= listing.price.toLocaleString("en-IN") %>
-                    </p>
+                     <p class="card-text">
+                         &#8377; <%= listing.price.toLocaleString("en-IN") %>
+                      </p>
 
-                    <p class="card-text">
-                        <%= listing.location %>, <%= listing.country %>
-                    </p>
+                     <p class="card-text">
+                         <%= listing.location %>, <%= listing.country %>
+                     </p>
+                   
 
                     <% if (listing.owner) { %>
-                        <p class="card-text">
+                         <p class="card-text">
                             <b>Owner:</b>
                             <%= listing.owner.username %>
                         </p>
@@ -296,4 +297,4 @@
     </div>
 
 </div>
-  
+

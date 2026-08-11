@@ -1,4 +1,5 @@
 const Listing = require("../models/listing");
+const cloudinary = require("../utils/cloudinary");
 
 module.exports.index = async (req,res) => {    // get request bheji /listings route par
     const allListings =  await Listing.find({});    // Listing model se sari documents ko allListing variable ke ander dal diya..
@@ -19,33 +20,105 @@ module.exports.showListing = async (req, res) => {
     res.render("listings/show.ejs", {listing});
 }
 
-module.exports.createListing =  async (req,res, next) =>{
-     const newListing = new Listing(req.body.listing);
-     newListing.owner = req.user._id;
-     await newListing.save();
-     req.flash("success", "New Listing Created !")
-     res.redirect("/listings"); 
-     
-}
 
-module.exports.editListing = async (req,res) => {  
-    let{id} = req.params;
-   const listing = await Listing.findById(id);
-    if(!listing){
-        req.flash("error", "Listing you requested does not Exist !");
-       return res.redirect("/listings");
+
+module.exports.createListing = async (req, res) => {
+    console.log("BODY:", req.body);
+console.log("FILE:", req.file);
+
+    const newListing = new Listing(req.body.listing);
+
+    newListing.owner = req.user._id;
+
+    if (req.file) {
+
+        const result = await new Promise((resolve, reject) => {
+
+            const uploadStream = cloudinary.uploader.upload_stream(
+                {
+                    folder: "listing_images"
+                },
+                (error, result) => {
+
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(result);
+                    }
+                }
+            );
+
+            uploadStream.end(req.file.buffer);
+        });
+
+        newListing.image = {
+            url: result.secure_url,
+            filename: result.public_id
+        };
     }
-   res.render("listings/edit.ejs", {listing});    
 
-}
+    await newListing.save();
 
- module.exports.updateListing = async (req,res) => {
-    let{id} = req.params;            // req me jo id aa rhi as parameter use access kar rahe
+    req.flash("success", "New Listing Created!");
 
-     await Listing.findByIdAndUpdate(id,{...req.body.listing});   // us id se documentya listing ko access ka update kardege
-      req.flash("success", " Listing Updated !")
+    res.redirect("/listings");
+};
+
+module.exports.renderEditForm = async (req, res) => {
+    const { id } = req.params;
+
+    const listing = await Listing.findById(id);
+
+    if (!listing) {
+        req.flash("error", "Listing not found!");
+        return res.redirect("/listings");
+    }
+
+    res.render("listings/edit.ejs", { listing });
+};
+
+module.exports.updateListing = async (req, res) => {
+    const { id } = req.params;
+
+    const listing = await Listing.findByIdAndUpdate(
+        id,
+        { ...req.body.listing },
+        { new: true, runValidators: true }
+    );
+
+    if (req.file) {
+        const result = await new Promise((resolve, reject) => {
+            const uploadStream = cloudinary.uploader.upload_stream(
+                {
+                    folder: "listing_images"
+                },
+                (error, result) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(result);
+                    }
+                }
+            );
+
+            uploadStream.end(req.file.buffer);
+        });
+
+        listing.image = {
+            url: result.secure_url,
+            filename: result.public_id
+        };
+
+        await listing.save();
+    }
+
+    req.flash("success", "Listing Updated!");
+
     res.redirect(`/listings/${id}`);
-}
+};
+
+              
+
 
  module.exports.destroyListing = async (req,res) => {
     let{id} = req.params; 
