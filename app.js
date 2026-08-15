@@ -12,6 +12,9 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 
 const session = require("express-session");
+const { MongoStore } = require("connect-mongo");
+
+
 const flash = require("connect-flash");
 
 const passport = require("passport");
@@ -50,7 +53,9 @@ passport.deserializeUser(User.deserializeUser());
 // DATABASE
 // =========================
 
-const Mongo_URL = "mongodb://127.0.0.1:27017/wanderlust";
+// const Mongo_URL = "mongodb://127.0.0.1:27017/wanderlust";
+
+const dbUrl = process.env.ATLASDB_URL;
 
 main()
     .then(() => {
@@ -61,7 +66,7 @@ main()
     });
 
 async function main() {
-    await mongoose.connect(Mongo_URL);
+    await mongoose.connect(dbUrl);
 }
 
 
@@ -87,22 +92,32 @@ app.use(
 // SESSION
 // =========================
 
+const store = MongoStore.create({
+    mongoUrl: process.env.ATLASDB_URL,
+    crypto: {
+        secret: process.env.SECRET
+    },
+    touchAfter: 24 * 3600
+});
+
+//     store.on("error", () => {
+//         console.log("ERROR IN MONGO SESSION",err);
+//     })
+
+
 const sessionOption = {
-    secret: "mysupersecretcode",
+      store,
+     secret:  process.env.SECRET,
+     resave: false,
+     saveUninitialized: true,
 
-    resave: false,
-
-    saveUninitialized: true,
-
-    cookie: {
+     cookie: {
         expires: new Date(
             Date.now() + 7 * 24 * 60 * 60 * 1000
         ),
-
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-
-        httpOnly: true
-    }
+          maxAge: 7 * 24 * 60 * 60 * 1000,
+         httpOnly: true
+     }
 };
 
 app.use(session(sessionOption));
@@ -144,11 +159,9 @@ app.use((req, res, next) => {
 // HOME ROUTE
 // =========================
 
-app.get("/", (req, res) => {
-
-    res.send("I am root");
-
-});
+// app.get("/", (req, res) => {
+//   res.send("I am root");
+// });
 
 
 // =========================

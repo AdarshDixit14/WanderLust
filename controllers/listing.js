@@ -1,10 +1,25 @@
 const Listing = require("../models/listing");
 const cloudinary = require("../utils/cloudinary");
 
-module.exports.index = async (req,res) => {    // get request bheji /listings route par
-    const allListings =  await Listing.find({});    // Listing model se sari documents ko allListing variable ke ander dal diya..
-    res.render("listings/index.ejs", {allListings});       //index.js file ko run karaya and ussesare listing document bheja ..
-}
+// module.exports.index = async (req,res) => {    // get request bheji /listings route par
+//     const allListings =  await Listing.find({});    // Listing model se sari documents ko allListing variable ke ander dal diya..
+//     res.render("listings/index.ejs", {allListings});       //index.js file ko run karaya and ussesare listing document bheja ..
+// }
+
+module.exports.index = async (req, res) => {
+
+    let { category } = req.query;
+
+    let allListings;
+
+    if (category) {
+        allListings = await Listing.find({ category: category });
+    } else {
+        allListings = await Listing.find({});
+    }
+
+    res.render("listings/index.ejs", { allListings });
+};
 
 module.exports.rendernewform = (req, res) => {   // so jaise hi is route par koi req aayi to new.ejs page render createHistogram..
       res.render("listings/new.ejs");

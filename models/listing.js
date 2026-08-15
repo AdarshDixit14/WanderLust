@@ -15,6 +15,21 @@ const listingSchema = new Schema({
   price:Number,
   country: String,
 
+  category: {
+      type: String,
+      enum: [
+            "Trending",
+            "Rooms",
+            "Iconic Cities",
+            "Castles",
+            "Amazing pools",
+            "Camping",
+            "Farms",
+            "Arctic",
+            "Boats"
+        ]
+    },
+
 image: {
     url: String,
     filename: String

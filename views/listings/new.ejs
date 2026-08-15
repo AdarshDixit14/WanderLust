@@ -75,6 +75,22 @@
         <input  name="listing[location]"  placeholder="Enter location" type="text"  class="form-control" required>
          <div class="invalid-feedback">Enter location !</div>
      </div>
+
+     <div class="mb-3">
+    <label for="category" class="form-label">Category</label>
+
+    <select name="listing[category]" id="category" class="form-select" required>
+        <option value="">Select Category</option>
+        <option value="Trending">Trending</option>
+        <option value="Rooms">Rooms</option>
+        <option value="Iconic Cities">Iconic Cities</option>
+        <option value="Castles">Castles</option>
+        <option value="Amazing pools">Amazing pools</option>
+        <option value="Camping">Camping</option>
+        <option value="Farms">Farms</option>
+        <option value="Arctic">Arctic</option>
+    </select>
+</div>
     <br><br>
 
         <button class="btn btn-dark add-btn">Add</button>    <%/* jaise hi add button par click karege toh post req jayegi /listings route par ... */%>
