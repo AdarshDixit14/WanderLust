@@ -159,9 +159,9 @@ app.use((req, res, next) => {
 // HOME ROUTE
 // =========================
 
-// app.get("/", (req, res) => {
-//   res.send("I am root");
-// });
+app.get("/", (req, res) => {
+    res.redirect("/listings");
+});
 
 
 // =========================
@@ -257,12 +257,14 @@ app.use((err, req, res, next) => {
 // SERVER
 // =========================
 
-app.listen(8080, () => {
+// =========================
+// SERVER
+// =========================
 
-    console.log(
-        "Server is running on port 8080"
-    );
+const PORT = process.env.PORT || 8080;
 
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
 
 
