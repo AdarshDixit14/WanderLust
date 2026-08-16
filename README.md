@@ -1,120 +1,170 @@
-# 🌍 WanderLust
+# 🏡 Wanderlust - Travel & Stay Listing Platform
 
-> **A Full-Stack Airbnb-Inspired Vacation Rental Platform**
+Wanderlust is a full-stack web application inspired by travel and accommodation platforms. 
+Users can explore different listings, create their own listings, upload images, and share reviews.
 
-WanderLust is a full-stack vacation rental web application inspired by Airbnb. It enables users to discover unique accommodations, create and manage property listings, upload images, leave reviews, and securely authenticate their accounts. The project is built using the MVC architecture to provide a scalable, maintainable, and responsive user experience.
+The project is built using Node.js, Express.js, MongoDB, EJS, Bootstrap, and Cloudinary.
+
+---
+
+## 🚀 Live Demo
+
+https://wanderlust-s1wz.onrender.com
 
 ---
 
 ## ✨ Features
 
-- 🔐 User Authentication & Authorization
-- 🏡 Create, Edit & Delete Property Listings
-- 📸 Image Upload Support
-- ⭐ Reviews & Ratings
-- 📍 Explore Vacation Destinations
-- 🎨 Responsive & User-Friendly Interface
-- 🛡️ Secure Route Protection
-- ⚡ Flash Messages & Form Validation
+- 🔐 User Registration & Login
+- 🚪 User Logout
+- 🏠 View All Listings
+- 🔍 Search Listings
+- 🏷️ Category-based Listings
+- ➕ Create New Listings
+- ✏️ Edit Listings
+- 🗑️ Delete Listings
+- ☁️ Image Upload using Cloudinary
+- ⭐ Add Reviews & Ratings
+- 🗑️ Delete Reviews
+- 👤 Review Author Display
+- 🔒 Ownership Authorization
+- 💬 Flash Messages
+- 💰 Listing Price & Location Details
+- 📱 Responsive Design
+- 🎨 Modern and Aesthetic UI
+- 🗄️ MongoDB Atlas Database Integration
 
 ---
 
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 - HTML5
 - CSS3
-- Bootstrap 5
+- Bootstrap
 - JavaScript
-- EJS
+- EJS (Embedded JavaScript Templates)
 
 ### Backend
+
 - Node.js
 - Express.js
 
 ### Database
-- MongoDB
+
+- MongoDB Atlas
 - Mongoose
 
 ### Authentication
+
 - Passport.js
 - Express Session
+- Passport Local Mongoose
 
-### Other Tools
+### Image Storage
+
 - Cloudinary
 - Multer
-- Connect Flash
-- Joi Validation
-- MVC Architecture
+
+### Deployment
+
+- Render
 
 ---
 
-## 📂 Project Structure
+## 📸 Project Pages
 
-```
-WanderLust
-│── models/
-│── routes/
-│── controllers/
-│── views/
-│── public/
-│── utils/
-│── middleware/
-│── app.js
-│── package.json
-```
+### 🏠 Home Page
 
+Users can browse available stays and explore different categories such as:
 
+- Trending
+- Rooms
+- Iconic Cities
+- Castles
+- Amazing Pools
+- Camping
+- Farms
+- Arctic
+- Boats
 
+### 📄 Listing Details Page
 
-## 📸 Screenshots
+Each listing displays:
 
-> Screenshots will be added soon.
+- Listing image
+- Title
+- Description
+- Price
+- Country
+- Location
+- Owner
+- Reviews and ratings
 
-- Home Page
-- Listing Details
-- Login & Signup
-- Create Listing
-- Edit Listing
+### ➕ Create Listing
 
----
+Logged-in users can create a new listing by providing:
 
-## 🎯 Future Enhancements
+- Title
+- Description
+- Image
+- Price
+- Country
+- Location
+- Category
 
-- ❤️ Wishlist Feature
-- 💳 Online Payment Integration
-- 📅 Booking System
-- 🔍 Advanced Search & Filters
-- 🗺️ Interactive Maps
-- 📱 Progressive Web App (PWA)
-- 📧 Email Notifications
+### ✏️ Edit Listing
 
----
+Listing owners can update their listing information.
 
-## 🤝 Contributing
+### ⭐ Review System
 
-Contributions, issues, and feature requests are welcome.
+Users can:
 
-Feel free to fork the repository and submit a pull request.
-
----
-
-## 👨‍💻 Author
-
-**Adarsh Dixit**
-
-- 🎓 B.Tech CSE Student
-- 💻 Full Stack Web Developer
-- 🌱 Currently learning Backend Development & DSA
-
-GitHub: https://github.com/AdarshDixit14
-
-LinkedIn: https://www.linkedin.com/in/adarshdixit14
+- Add ratings
+- Write reviews
+- View reviews
+- Delete their own reviews
 
 ---
 
-## ⭐ Support
+## 🔐 Authentication & Authorization
 
-If you found this project helpful, don't forget to **Star ⭐ the repository**.
+The application uses Passport.js for authentication.
 
-Happy Coding! 🚀
+### User Authentication
+
+- Register
+- Login
+- Logout
+
+### Authorization
+
+- Only logged-in users can create listings.
+- Only listing owners can edit their listings.
+- Only listing owners can delete their listings.
+- Only review authors can delete their reviews.
+
+---
+
+## ☁️ Image Upload
+
+Images are uploaded using Cloudinary.
+
+The application uses Multer to handle file uploads before storing the images in Cloudinary.
+
+This allows listing images to be stored securely in cloud storage instead of directly inside the project.
+
+---
+
+## 🗄️ Database
+
+The application uses MongoDB Atlas as the database.
+
+### Main Models
+
+```text
+User
+Listing
+Review
