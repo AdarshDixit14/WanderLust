@@ -30,8 +30,6 @@ https://wanderlust-ajp4.onrender.com
 - 🔒 Ownership Authorization
 - 💬 Flash Messages
 - 💰 Listing Price & Location Details
-- 📱 Responsive Design
-- 🎨 Modern and Aesthetic UI
 - 🗄️ MongoDB Atlas Database Integration
 
 ---
@@ -62,18 +60,20 @@ https://wanderlust-ajp4.onrender.com
 - Express Session
 - Passport Local Mongoose
 
-### Image Storage
+** Image Storage **
+* Cloudinary
+*  Multer
 
-- Cloudinary
-- Multer
-
-### Deployment
-
-- Render
+** Deployment:**
+* Render
 
 ---
 
-📂 Project Structure
+
+
+## 📂 Project Structure
+
+```
 Wanderlust/
 │
 ├── app.js
@@ -133,6 +133,10 @@ Wanderlust/
 ├── middleware.js
 ├── schema.js
 └── cloudConfig.js
+```
+
+---
+
 
 ## 📸 Project Pages
 
@@ -280,44 +284,41 @@ The application uses Passport.js for authentication.
 
 ## ☁️ Image Upload
 
-Images are uploaded using Cloudinary.
-
-The application uses Multer to handle file uploads before storing the images in Cloudinary.
-
-This allows listing images to be stored securely in cloud storage instead of directly inside the project.
+-Images are uploaded using Cloudinary.
+-The application uses Multer to handle file uploads before storing the images in Cloudinary.
+-This allows listing images to be stored securely in cloud storage instead of directly inside the project.
 
 ---
 
 ## 🗄️ Database
 
-The application uses MongoDB Atlas as the database.
+-The application uses MongoDB Atlas as the database.
 
 ---
-🔮 Future Improvements
 
+
+## 📈 Future Improvements
 Some features planned for future versions:
 
-📅 Booking System
-❤️ Wishlist
-💳 Online Payment
-👤 User Profiles
-🔔 Notifications
-📧 Email Notifications
-🔎 Advanced Search & Filters
-🏠 More Listing Categories
+* Search & filtering system
+* Booking system
+* Wishlist feature
+* Payment integration
+* User profile pages
+* Notifications
+* More Listing Categories
 ---
 
-👨‍💻 Author
-Adarsh Dixit
+## 👨‍💻 Author
+ ** Adarsh Dixit
 
 B.Tech Computer Science & Engineering Student
 Frontend & Full-Stack Web Developer
 
 GitHub: https://github.com/AdarshDixit14
-
 LinkedIn: https://www.linkedin.com/in/adarshdixit14
 ---
-📜 License
+ ## 📜 License
 This project was created for educational and learning purposes.
 
 
