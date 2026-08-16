@@ -216,6 +216,7 @@ Users can:
 ### 💬 Reviews Section
 <img width="1896" height="862" alt="Review" src="https://github.com/user-attachments/assets/a893ad83-c29f-4333-841b-4f95e1442d79" />
 
+---
 
 
 
@@ -310,14 +311,15 @@ Some features planned for future versions:
 ---
 
 ## 👨‍💻 Author
- ** Adarsh Dixit
+ ** Adarsh Dixit**
 
 B.Tech Computer Science & Engineering Student
 Frontend & Full-Stack Web Developer
 
-GitHub: https://github.com/AdarshDixit14
-LinkedIn: https://www.linkedin.com/in/adarshdixit14
+* GitHub: https://github.com/AdarshDixit14
+* LinkedIn: https://www.linkedin.com/in/adarshdixit14
 ---
+
  ## 📜 License
 This project was created for educational and learning purposes.
 
