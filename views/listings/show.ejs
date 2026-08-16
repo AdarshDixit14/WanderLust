@@ -26,17 +26,19 @@
                     </p>
 
                      <p class="card-text">
+                        <b>Price :</b>
                          &#8377; <%= listing.price.toLocaleString("en-IN") %>
                       </p>
 
                      <p class="card-text">
+                        <b>Location :</b>
                          <%= listing.location %>, <%= listing.country %>
                      </p>
                    
 
                     <% if (listing.owner) { %>
                          <p class="card-text">
-                            <b>Owner:</b>
+                            <b>Hosted By :</b><br>
                             <%= listing.owner.username %>
                         </p>
                     <% } %>
@@ -98,9 +100,7 @@
 
                     <div class="mb-3">
 
-                        <label class="form-label">
-                            Rating
-                        </label>
+                      
 
                         <div class="d-flex justify-content-center">
 
@@ -197,7 +197,7 @@
                             Comment
                         </label>
 
-                        <textarea
+                        <textarea style="resize: none;"
                             name="review[comment]"
                             id="comment"
                             rows="5"
